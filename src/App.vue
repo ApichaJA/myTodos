@@ -3,10 +3,11 @@
     <h1>My to-dos</h1>
     <input v-on:keyup.enter="submit" v-model="eventInput" placeholder="Create a new to-do...">
     <ul class="row">
-      <li v-for="Mytodos in eventTodos" :key="Mytodos">
+      <li v-bind:class="{ active: active }" v-for="Mytodos in eventTodos" :key="Mytodos">
         <div class="myTodos">
-          <label>{{Mytodos.title}}</label>
-          <button class="edit">edit</button>
+          <label v-if="onEdit">{{Mytodos.title}}</label>
+          <input v-if="showEdit" v-on:keyup.enter="submitEdit" v-model="Mytodos.title">
+          <button class="edit" @click="editTodos(Mytodos)">edit</button>
           <button class="delete" @click="deleteTodos(Mytodos)">delete</button>
         </div>
       </li>
@@ -21,6 +22,8 @@ export default {
   name: 'app',
   data(){
     return{
+      onEdit: true,
+      showEdit:false,
       eventInput:"",
       eventTodos:[
         {id: 0, title: 'Do the dished'},
@@ -37,8 +40,17 @@ export default {
       })
     this.eventInput = ""
     },
+    submitEdit(){
+      this.eventTodos.title = this.Mytodos
+      this.onEdit = true,
+      this.showEdit = false
+    },
     deleteTodos(Mytodos){
       this.eventTodos.splice(this.eventTodos.indexOf(Mytodos), 1);
+    },
+    editTodos(){
+      this.onEdit = false,
+      this.showEdit = true
     }
   },
 }
@@ -52,7 +64,9 @@ body {
 .myTodos{
   display: flex!important;
   padding: .75rem 1.25rem;
-  
+}
+.Done{
+  text-decoration: line-through;
 }
 #app {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",
