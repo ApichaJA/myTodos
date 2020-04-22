@@ -1,45 +1,46 @@
 <template>
   <div id="app">
-    <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-      crossorigin="anonymous"
-    />
     <div class="container">
-      <h1>My to-dos</h1>
+      <div class="row">
+        <div class="col-12 py-5">
+          <h1>My to-dos</h1>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-sm-10 col-md-8 cl-lg-6">
       <input
-        class="col-12 col-sm-10 col-md-8 cl-lg-6"
+        class="form-control"
         v-on:keyup.enter="submit"
         v-model="eventInput"
         placeholder="Create a new to-do..."
       />
+        </div>
+      </div>
       <div class="row">
         <div class="col-12 col-sm-10 col-lg-6">
           <ul class="list-group">
-            <li class="d-flex align-items-center list-group-item" v-for="Mytodos in eventTodos" :key="Mytodos.id">
-              <button data-v-216cc175="" class="btn border-0 flex-grow-1 text-left shadow-none">
-                <span v-show="onEdit != Mytodos">{{Mytodos.messageTodos}}</span>
-                </button>
-                <input
-                  class="flex-grow-1"
-                  v-show="onEdit == Mytodos"
-                  v-on:keyup.enter="submitEdit"
-                  v-model="Mytodos.messageTodos"
-                />
-                <button
-                  class="btn btn-outline-primary border-0 ml-2 edit"
-                  @click="editTodos(Mytodos)"
-                >
-                  <span class="fa fa-edit"></span>
-                </button>
-                <button
-                  class="btn btn-outline-danger border-0 delete"
-                  @click="deleteTodos(Mytodos)"
-                >
-                  <span class="fa fa-trash"></span>
-                </button>
+            <li
+              class="d-flex align-items-center list-group-item"
+              v-for="Mytodos in eventTodos"
+              :key="Mytodos.id"
+            >
+              <button :style="Mytodos.completed ? { 'text-decoration': 'line-through' } : null" @click="Mytodos.completed = !Mytodos.completed" v-show="onEdit != Mytodos" class="btn border-0 flex-grow-1 text-left shadow-none">
+                <span>{{Mytodos.messageTodos}}</span>
+              </button>
+              <input class="form-control"
+                v-show="onEdit == Mytodos"
+                v-on:keyup.enter="submitEdit"
+                v-model="Mytodos.messageTodos"
+              />
+              <button
+                class="btn btn-outline-primary border-0 ml-2 edit"
+                @click="editTodos(Mytodos)"
+              >
+                <span class="fa fa-edit"></span>
+              </button>
+              <button class="btn btn-outline-danger border-0 delete" @click="deleteTodos(Mytodos)">
+                <span class="fa fa-trash"></span>
+              </button>
             </li>
           </ul>
         </div>
@@ -53,12 +54,13 @@ export default {
   name: "app",
   data() {
     return {
+      isClicked: false,
       onEdit: false,
       eventInput: "",
       eventTodos: [
-        { id: 0, messageTodos: "Do the dished" },
-        { id: 1, messageTodos: "Take out the trash" },
-        { id: 2, messageTodos: "Finish doing laundry" }
+        { id: 0, messageTodos: "Do the dishes", completed: false },
+        { id: 1, messageTodos: "Take out the trash", completed: false },
+        { id: 2, messageTodos: "Finish doing laundry", completed: false }
       ]
     };
   },
@@ -66,7 +68,8 @@ export default {
     submit() {
       this.eventTodos.push({
         messageTodos: this.eventInput,
-        id: this.eventTodos.length
+        id: this.eventTodos.length,
+        completed: false
       });
       this.eventInput = "";
     },
@@ -79,7 +82,7 @@ export default {
     },
     editTodos(Mytodos) {
       this.onEdit = Mytodos;
-    }
+    },
   }
 };
 </script>
