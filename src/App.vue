@@ -8,12 +8,12 @@
       </div>
       <div class="row mb-3">
         <div class="col-12 col-sm-10 col-md-8 cl-lg-6">
-      <input
-        class="form-control"
-        v-on:keyup.enter="submit"
-        v-model="eventInput"
-        placeholder="Create a new to-do..."
-      />
+          <input
+            class="form-control"
+            v-on:keyup.enter="submit"
+            v-model="eventInput"
+            placeholder="Create a new to-do..."
+          />
         </div>
       </div>
       <div class="row">
@@ -24,17 +24,25 @@
               v-for="Mytodos in eventTodos"
               :key="Mytodos.id"
             >
-              <button :style="Mytodos.completed ? { 'text-decoration': 'line-through' } : null" @click="Mytodos.completed = !Mytodos.completed" v-show="onEdit != Mytodos" class="btn border-0 flex-grow-1 text-left shadow-none">
+              <button
+                :style="Mytodos.completed ? { 'text-decoration': 'line-through' } : null"
+                @click="Mytodos.completed = !Mytodos.completed"
+                v-show="onEdit != Mytodos"
+                class="btn border-0 flex-grow-1 text-left shadow-none"
+              >
                 <span>{{Mytodos.messageTodos}}</span>
               </button>
-              <input class="form-control"
+              <input
+                class="form-control"
+                :ref="Mytodos.messageTodos + Mytodos.id"
                 v-show="onEdit == Mytodos"
                 v-on:keyup.enter="submitEdit"
+                @focusout="submitEdit"
                 v-model="Mytodos.messageTodos"
               />
               <button
                 class="btn btn-outline-primary border-0 ml-2 edit"
-                @click="editTodos(Mytodos)"
+                @click.prevent="editTodos(Mytodos)"
               >
                 <span class="fa fa-edit"></span>
               </button>
@@ -82,7 +90,10 @@ export default {
     },
     editTodos(Mytodos) {
       this.onEdit = Mytodos;
-    },
+      this.$nextTick(function() {
+        this.$refs[Mytodos.messageTodos + Mytodos.id][0].focus();
+      });
+    }
   }
 };
 </script>
