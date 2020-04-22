@@ -1,81 +1,89 @@
 <template>
   <div id="app">
-    <h1>My to-dos</h1>
-    <input v-on:keyup.enter="submit" v-model="eventInput" placeholder="Create a new to-do...">
-    <ul class="row">
-      <li v-bind:class="{ active: active }" v-for="Mytodos in eventTodos" :key="Mytodos">
-        <div class="myTodos">
-          <label v-if="onEdit">{{Mytodos.title}}</label>
-          <input v-if="showEdit" v-on:keyup.enter="submitEdit" v-model="Mytodos.title">
-          <button class="edit" @click="editTodos(Mytodos)">edit</button>
-          <button class="delete" @click="deleteTodos(Mytodos)">delete</button>
+    <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+      crossorigin="anonymous"
+    />
+    <div class="container">
+      <h1>My to-dos</h1>
+      <input
+        class="col-12 col-sm-10 col-md-8 cl-lg-6"
+        v-on:keyup.enter="submit"
+        v-model="eventInput"
+        placeholder="Create a new to-do..."
+      />
+      <div class="row">
+        <div class="col-12 col-sm-10 col-lg-6">
+          <ul class="list-group">
+            <li class="d-flex align-items-center list-group-item" v-for="Mytodos in eventTodos" :key="Mytodos.id">
+              <button data-v-216cc175="" class="btn border-0 flex-grow-1 text-left shadow-none">
+                <span v-show="onEdit != Mytodos">{{Mytodos.messageTodos}}</span>
+                </button>
+                <input
+                  class="flex-grow-1"
+                  v-show="onEdit == Mytodos"
+                  v-on:keyup.enter="submitEdit"
+                  v-model="Mytodos.messageTodos"
+                />
+                <button
+                  class="btn btn-outline-primary border-0 ml-2 edit"
+                  @click="editTodos(Mytodos)"
+                >
+                  <span class="fa fa-edit"></span>
+                </button>
+                <button
+                  class="btn btn-outline-danger border-0 delete"
+                  @click="deleteTodos(Mytodos)"
+                >
+                  <span class="fa fa-trash"></span>
+                </button>
+            </li>
+          </ul>
         </div>
-      </li>
-    </ul>
-    <MyTodos/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'app',
-  data(){
-    return{
-      onEdit: true,
-      showEdit:false,
-      eventInput:"",
-      eventTodos:[
-        {id: 0, title: 'Do the dished'},
-        {id: 0, title: 'Take out the trash'},
-        {id: 0, title: 'Finish doing laundry'},
+  name: "app",
+  data() {
+    return {
+      onEdit: false,
+      eventInput: "",
+      eventTodos: [
+        { id: 0, messageTodos: "Do the dished" },
+        { id: 1, messageTodos: "Take out the trash" },
+        { id: 2, messageTodos: "Finish doing laundry" }
       ]
-    }
+    };
   },
   methods: {
-    submit(){
+    submit() {
       this.eventTodos.push({
-        title: this.eventInput,
-        id: 1
-      })
-    this.eventInput = ""
+        messageTodos: this.eventInput,
+        id: this.eventTodos.length
+      });
+      this.eventInput = "";
     },
-    submitEdit(){
-      this.eventTodos.title = this.Mytodos
-      this.onEdit = true,
-      this.showEdit = false
+    submitEdit() {
+      this.eventTodos.messageTodos = this.Mytodos;
+      this.onEdit = false;
     },
-    deleteTodos(Mytodos){
+    deleteTodos(Mytodos) {
       this.eventTodos.splice(this.eventTodos.indexOf(Mytodos), 1);
     },
-    editTodos(){
-      this.onEdit = false,
-      this.showEdit = true
+    editTodos(Mytodos) {
+      this.onEdit = Mytodos;
     }
-  },
-}
+  }
+};
 </script>
 
 <style>
-body {
-  margin: 0;
-  box-sizing: border-box;
-}
-.myTodos{
-  display: flex!important;
-  padding: .75rem 1.25rem;
-}
-.Done{
-  text-decoration: line-through;
-}
-#app {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",
-  Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,
-  "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import "assets/styles/main.css";
 </style>
